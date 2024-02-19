@@ -6,6 +6,8 @@ import SearchBar from './SearchBar';
 import Logo from '../assets/images/creative-home.png';
 
 
+
+
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
 

@@ -1,27 +1,38 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState } from "react";
+import axios from "axios";
 
-const SearchBar = ({ onSearch }) => {
-    const [searchTerm, setSearchTerm] = useState('');
+const SearchBar = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
-    const handleInputChange = (event) => {
-        setSearchTerm(event.target.value);
-    };
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get("/api/search", {
+                params: {
+                    query: searchQuery,
+                },
+            });
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        onSearch(searchTerm);
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error("Error searching:", error);
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <input
                 type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={handleInputChange}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="submit">Search</button>
-        </form>
+            <button onClick={handleSearch}>Search</button>
+            <ul>
+                {searchResults.map((result, index) => (
+                    <li key={index}>{result}</li>
+                ))}
+            </ul>
+        </div>
     );
 };
 
